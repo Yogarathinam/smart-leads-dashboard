@@ -863,8 +863,9 @@ const DashboardMock = ({ isDark }: { isDark: boolean }) => {
 };
 
 export default function LandingPage() {
-  const isDark = useThemeStore((state) => state.isDark);
+const theme = useThemeStore((state) => state.theme);
 const toggleTheme = useThemeStore((state) => state.toggleTheme);
+const isDark = theme === 'dark';
   const [authConfig, setAuthConfig] = useState<{ isOpen: boolean; tab: AuthTab }>({
     isOpen: false,
     tab: 'login',
@@ -938,7 +939,7 @@ const toggleTheme = useThemeStore((state) => state.toggleTheme);
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className={`flex items-center gap-2 ${textMain}`}>
             <Icons.Logo />
-            <span className="font-semibold tracking-tight text-lg">Vertex</span>
+            <span className="font-semibold tracking-tight text-lg">GigFlow</span>
           </div>
 
           <div className="flex items-center gap-4 sm:gap-6">
