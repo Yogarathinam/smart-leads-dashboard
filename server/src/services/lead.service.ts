@@ -75,7 +75,7 @@ export const createLead = async (payload: CreateLeadBody, userId: string) => {
 };
 
 export const listLeads = async (query: ListLeadsQuery) => {
-  const page = query.page ?? 1;
+  const page = Math.max(1, Number(query.page) || 1);
   const skip = (page - 1) * PAGE_LIMIT;
   const filter = buildLeadFilter(query);
   const sort = buildSortOption(query.sort);

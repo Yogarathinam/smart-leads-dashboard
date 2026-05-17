@@ -18,40 +18,48 @@ import {
   useUpdateLead,
 } from '../features/leads/leads.hooks';
 import { downloadBlob } from '../utils/download';
-import type { CreateLeadPayload, Lead, LeadSource, LeadStatus } from '../features/leads/leads.types';
+import type {
+  CreateLeadPayload,
+  Lead,
+  LeadSource,
+  LeadStatus,
+} from '../features/leads/leads.types';
 import { useAuthStore } from '../features/auth/auth.store';
 
-type StatCardProps = {
+interface StatCardProps {
   icon: React.ComponentType<{ className?: string }>;
   label: string;
   value: string | number;
   trend: string;
   up: boolean;
   delay: number;
-};
+}
 
 const StatCard = ({ icon: Icon, label, value, trend, up, delay }: StatCardProps) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
-    transition={{ delay, duration: 0.5, ease: 'easeOut' }}
-    className="group relative overflow-hidden rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm transition-colors hover:border-zinc-300 dark:border-zinc-800 dark:bg-[#0a0c14]/80 dark:hover:border-zinc-700/80"
+    transition={{ delay, duration: 0.45, ease: 'easeOut' }}
+    className="group relative flex min-h-[148px] flex-col justify-between overflow-hidden rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm transition-colors hover:border-zinc-300 dark:border-zinc-800 dark:bg-[#0a0c14]/80 dark:hover:border-zinc-700/80"
   >
-    <div className="absolute -right-4 -top-4 p-8 opacity-5 transition-opacity group-hover:opacity-10">
-      <Icon className="h-16 w-16 text-cyan-500 dark:text-cyan-400" />
+    <div className="absolute -right-3 -top-3 opacity-[0.04] transition-opacity group-hover:opacity-[0.08]">
+      <Icon className="h-20 w-20 text-cyan-500 dark:text-cyan-400" />
     </div>
 
-    <div className="mb-4 flex items-center gap-2 text-zinc-500 dark:text-zinc-400">
+    <div className="relative z-10 flex items-center gap-2">
       <Icon className="h-4 w-4 text-cyan-500 dark:text-cyan-400" />
-      <span className="text-xs font-medium uppercase tracking-wider">{label}</span>
+      <span className="text-xs font-semibold uppercase tracking-[0.14em] text-zinc-500 dark:text-zinc-400">
+        {label}
+      </span>
     </div>
 
-    <div className="flex items-end justify-between">
-      <h3 className="text-3xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
+    <div className="relative z-10 mt-6 flex items-end justify-between gap-4">
+      <h3 className="text-4xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-100">
         {value}
       </h3>
+
       <span
-        className={`rounded-full px-2 py-1 text-xs font-medium ${
+        className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium ${
           up
             ? 'bg-emerald-500/10 text-emerald-600 dark:bg-emerald-400/10 dark:text-emerald-400'
             : 'bg-rose-500/10 text-rose-600 dark:bg-rose-400/10 dark:text-rose-400'
@@ -94,6 +102,23 @@ const DashboardPage = () => {
   const deleteLeadMutation = useDeleteLead();
   const exportCsvMutation = useExportLeadsCsv();
 
+  const stats = useMemo(() => {
+    if (!data) return { total: 0, qualified: 0, contacted: 0, lost: 0 };
+
+    const pagination = data.pagination as { total?: number; totalItems?: number };
+    const total = pagination.total ?? pagination.totalItems ?? 0;
+    const qualified = data.items.filter((lead) => lead.status === 'qualified').length;
+    const contacted = data.items.filter((lead) => lead.status === 'contacted').length;
+    const lost = data.items.filter((lead) => lead.status === 'lost').length;
+
+    return {
+      total,
+      qualified,
+      contacted,
+      lost,
+    };
+  }, [data]);
+
   const handleCreateLead = async (payload: CreateLeadPayload) => {
     await createLeadMutation.mutateAsync(payload);
     setIsCreateOpen(false);
@@ -128,13 +153,7 @@ const DashboardPage = () => {
     downloadBlob(blob, 'leads.csv');
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex min-h-[50vh] items-center justify-center">
-        <Spinner />
-      </div>
-    );
-  }
+  if (isLoading) return <Spinner />;
 
   if (isError || !data) {
     return (
@@ -146,7 +165,7 @@ const DashboardPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-50 pb-12 font-sans text-zinc-900 transition-colors duration-300 selection:bg-cyan-500/20 dark:bg-[#030407] dark:text-zinc-100 dark:selection:bg-cyan-500/30">
+    <div className="min-h-screen bg-zinc-50 pb-12 font-sans text-zinc-900 selection:bg-cyan-500/20 dark:bg-[#030407] dark:text-zinc-100 dark:selection:bg-cyan-500/30">
       <div className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -157,40 +176,40 @@ const DashboardPage = () => {
             Pipeline Intelligence
           </h1>
           <p className="text-sm text-zinc-500 dark:text-zinc-400">
-            Monitor velocity, route leads, and analyze conversion data in real-time.
+            Monitor lead flow, track progress, and manage your pipeline in real time.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
           <StatCard
             icon={Users}
-            label="Total Pipeline"
-            value={data.pagination.total ?? 0}
-            trend="+12.5%"
+            label="Total Leads"
+            value={stats.total}
+            trend={`${data.items.length} shown`}
             up
             delay={0.1}
           />
           <StatCard
             icon={Activity}
-            label="Active Routing"
-            value="142"
-            trend="+5.2%"
+            label="Contacted"
+            value={stats.contacted}
+            trend="Live status"
             up
             delay={0.2}
           />
           <StatCard
             icon={BarChart3}
-            label="Conversion Rate"
-            value="18.4%"
-            trend="+2.1%"
+            label="Qualified"
+            value={stats.qualified}
+            trend="High intent"
             up
             delay={0.3}
           />
           <StatCard
             icon={TrendingUp}
-            label="Avg Velocity"
-            value="12 Days"
-            trend="-1.4%"
+            label="Lost"
+            value={stats.lost}
+            trend="Needs follow-up"
             up={false}
             delay={0.4}
           />
@@ -230,7 +249,7 @@ const DashboardPage = () => {
           />
 
           {data.items.length === 0 ? (
-            <div className="rounded-2xl border border-zinc-200 bg-white p-12 shadow-sm dark:border-zinc-800 dark:bg-[#0a0c14] dark:shadow-2xl">
+            <div className="rounded-2xl border border-zinc-200 bg-white p-12 shadow-sm dark:border-zinc-800/80 dark:bg-[#0a0c14]">
               <EmptyState
                 title="No leads found"
                 description="Create a lead or adjust your filters to see results."
@@ -259,7 +278,6 @@ const DashboardPage = () => {
         </motion.div>
 
         <LeadModal
-          key={isCreateOpen ? 'create-open' : 'create-closed'}
           title="Create new lead"
           open={isCreateOpen}
           onClose={() => setIsCreateOpen(false)}
@@ -268,7 +286,6 @@ const DashboardPage = () => {
         />
 
         <LeadModal
-          key={editingLead?.id ?? 'edit-empty'}
           title="Edit lead"
           open={Boolean(editingLead)}
           onClose={() => setEditingLead(null)}

@@ -1,28 +1,24 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
-export type Theme = 'light' | 'dark';
+type Theme = 'light' | 'dark';
 
 interface ThemeState {
   theme: Theme;
-  isDark: boolean;
-  toggleTheme: () => void;
   setTheme: (theme: Theme) => void;
+  toggleTheme: () => void;
 }
 
-export const useThemeStore = create<ThemeState>((set) => ({
-  theme: 'dark',
-  isDark: true,
-  toggleTheme: () =>
-    set((state) => {
-      const nextTheme = state.theme === 'dark' ? 'light' : 'dark';
-      return {
-        theme: nextTheme,
-        isDark: nextTheme === 'dark',
-      };
+export const useThemeStore = create<ThemeState>()(
+  persist(
+    (set, get) => ({
+      theme: 'light',
+      setTheme: (theme) => set({ theme }),
+      toggleTheme: () =>
+        set({ theme: get().theme === 'dark' ? 'light' : 'dark' }),
     }),
-  setTheme: (theme) =>
-    set({
-      theme,
-      isDark: theme === 'dark',
-    }),
-}));
+    {
+      name: 'smart-leads-theme',
+    }
+  )
+);
