@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import LoginPage from '../pages/LoginPage';
 import RegisterPage from '../pages/RegisterPage';
 import DashboardPage from '../pages/DashboardPage';
+import LeadDetailsPage from '../pages/LeadDetailsPage';
 import UnauthorizedPage from '../pages/UnauthorizedPage';
 import NotFoundPage from '../pages/NotFoundPage';
 import { AppLayout } from '../components/layout/AppLayout';
@@ -70,6 +71,7 @@ export const router = createBrowserRouter([
         children: [
           { path: '/', element: <Navigate to="/dashboard" replace /> },
           { path: '/dashboard', element: <DashboardPage /> },
+          { path: '/leads/:id', element: <LeadDetailsPage /> },
         ],
       },
     ],
