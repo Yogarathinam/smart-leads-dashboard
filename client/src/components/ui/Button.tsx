@@ -8,9 +8,12 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, PropsWith
 }
 
 const variantClasses: Record<Variant, string> = {
-  primary: 'bg-cyan-400 text-zinc-900 hover:bg-cyan-300 shadow-[0_0_15px_rgba(34,211,238,0.2)]',
-  secondary: 'bg-zinc-800/50 text-zinc-300 hover:bg-zinc-700/50 border border-zinc-700/80',
-  danger: 'bg-rose-500/90 text-white hover:bg-rose-500 shadow-[0_0_15px_rgba(244,63,94,0.3)]',
+  primary:
+    'bg-cyan-500 text-zinc-950 hover:bg-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.18)]',
+  secondary:
+    'border border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-100 dark:border-zinc-700/80 dark:bg-zinc-800/50 dark:text-zinc-300 dark:hover:bg-zinc-700/50',
+  danger:
+    'bg-rose-500 text-white hover:bg-rose-600 shadow-[0_0_15px_rgba(244,63,94,0.22)]',
 };
 
 export const Button = ({
@@ -22,7 +25,9 @@ export const Button = ({
 }: ButtonProps) => {
   return (
     <button
-      className={`flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50 ${variantClasses[variant]} ${fullWidth ? 'w-full' : ''} ${className}`}
+      className={`inline-flex items-center justify-center rounded-xl px-4 py-2.5 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-60 ${
+        fullWidth ? 'w-full' : ''
+      } ${variantClasses[variant]} ${className}`}
       {...props}
     >
       {children}

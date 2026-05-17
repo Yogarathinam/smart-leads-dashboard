@@ -7,16 +7,14 @@ interface LeadsSearchProps {
 
 export const LeadsSearch = ({ value, onChange }: LeadsSearchProps) => {
   return (
-    <div className="relative group w-full">
-      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-zinc-500 group-focus-within:text-cyan-400 transition-colors">
-        <Search className="w-4 h-4" />
-      </div>
+    <div className="relative w-full">
+      <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400 dark:text-zinc-500" />
       <input
         type="text"
         value={value}
-        onChange={(event) => onChange(event.target.value)}
-        placeholder="Search leads by name or email..."
-        className="w-full bg-[#030407] border border-zinc-800 rounded-lg py-2.5 pl-10 pr-4 text-sm text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all shadow-inner"
+        onChange={(e) => onChange(e.target.value)}
+        placeholder="Search by name or email..."
+        className="w-full rounded-xl border border-zinc-300 bg-white py-3 pl-10 pr-4 text-sm text-zinc-900 outline-none transition placeholder:text-zinc-400 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 dark:border-zinc-800 dark:bg-[#09090B] dark:text-zinc-100 dark:placeholder:text-zinc-500"
       />
     </div>
   );

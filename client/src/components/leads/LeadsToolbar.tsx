@@ -1,4 +1,5 @@
 import { Download, Plus } from 'lucide-react';
+import { Button } from '../ui/Button';
 import { LeadsFilters } from './LeadsFilters';
 import { LeadsSearch } from './LeadsSearch';
 import type { LeadSource, LeadStatus } from '../../features/leads/leads.types';
@@ -33,46 +34,45 @@ export const LeadsToolbar = ({
   isExporting,
 }: LeadsToolbarProps) => {
   return (
-    <div className="space-y-5 rounded-2xl bg-[#0a0c14]/80 border border-zinc-800/80 p-5 shadow-2xl backdrop-blur-xl relative overflow-hidden">
-      {/* Subtle top edge gradient highlight */}
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-cyan-500/20 to-transparent"></div>
-      
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between relative z-10">
-        <div className="w-full md:max-w-md">
+    <div className="rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-[#0a0c14]/80">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex-1">
           <LeadsSearch value={search} onChange={onSearchChange} />
         </div>
 
-        <div className="flex flex-wrap gap-3">
-          {canExport && (
-            <button 
-              onClick={onExportClick} 
+        <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center lg:justify-end">
+          <LeadsFilters
+            status={status}
+            source={source}
+            sort={sort}
+            onStatusChange={onStatusChange}
+            onSourceChange={onSourceChange}
+            onSortChange={onSortChange}
+          />
+
+          {canExport ? (
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={onExportClick}
               disabled={isExporting}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-zinc-300 bg-zinc-800/50 hover:bg-zinc-700/50 border border-zinc-700/80 rounded-lg transition-colors active:scale-95 disabled:opacity-50"
+              className="inline-flex items-center gap-2"
             >
-              <Download className="w-4 h-4" />
+              <Download className="h-4 w-4" />
               {isExporting ? 'Exporting...' : 'Export CSV'}
-            </button>
-          )}
-          <button 
+            </Button>
+          ) : null}
+
+          <Button
+            type="button"
             onClick={onCreateClick}
-            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-zinc-900 bg-cyan-400 hover:bg-cyan-300 rounded-lg transition-all active:scale-95 shadow-[0_0_15px_rgba(34,211,238,0.25)]"
+            className="inline-flex items-center gap-2"
           >
-            <Plus className="w-4 h-4" />
-            Create Lead
-          </button>
+            <Plus className="h-4 w-4" />
+            New Lead
+          </Button>
         </div>
       </div>
-
-      <div className="h-px w-full bg-zinc-800/50"></div>
-
-      <LeadsFilters
-        status={status}
-        source={source}
-        sort={sort}
-        onStatusChange={onStatusChange}
-        onSourceChange={onSourceChange}
-        onSortChange={onSortChange}
-      />
     </div>
   );
 };

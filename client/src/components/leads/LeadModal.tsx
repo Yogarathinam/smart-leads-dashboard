@@ -8,7 +8,7 @@ interface LeadModalProps {
   onClose: () => void;
   initialValues?: Lead | null;
   isSubmitting: boolean;
-  onSubmit: (payload: CreateLeadPayload) => Promise<void>;
+  onSubmit: (payload: CreateLeadPayload) => Promise<unknown>;
 }
 
 export const LeadModal = ({
@@ -21,10 +21,11 @@ export const LeadModal = ({
 }: LeadModalProps) => {
   return (
     <Modal title={title} open={open} onClose={onClose}>
-      <div className="mt-4">
-        {/* We rely on Modal from UI, but passing our highly styled LeadForm inside */}
-        <LeadForm initialValues={initialValues} onSubmit={onSubmit} isSubmitting={isSubmitting} />
-      </div>
+      <LeadForm
+        initialValues={initialValues}
+        isSubmitting={isSubmitting}
+        onSubmit={onSubmit}
+      />
     </Modal>
   );
 };

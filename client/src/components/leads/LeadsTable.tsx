@@ -13,11 +13,15 @@ interface LeadsTableProps {
 }
 
 const getStatusStyle = (status: string) => {
-  switch(status) {
-    case 'qualified': return 'text-emerald-400 bg-emerald-400/10 border-emerald-400/20';
-    case 'lost': return 'text-rose-400 bg-rose-400/10 border-rose-400/20';
-    case 'contacted': return 'text-cyan-400 bg-cyan-400/10 border-cyan-400/20';
-    default: return 'text-amber-400 bg-amber-400/10 border-amber-400/20'; // new
+  switch (status) {
+    case 'qualified':
+      return 'border border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-400/20 dark:bg-emerald-400/10 dark:text-emerald-400';
+    case 'lost':
+      return 'border border-rose-200 bg-rose-50 text-rose-700 dark:border-rose-400/20 dark:bg-rose-400/10 dark:text-rose-400';
+    case 'contacted':
+      return 'border border-cyan-200 bg-cyan-50 text-cyan-700 dark:border-cyan-400/20 dark:bg-cyan-400/10 dark:text-cyan-400';
+    default:
+      return 'border border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-400/20 dark:bg-amber-400/10 dark:text-amber-400';
   }
 };
 
@@ -25,81 +29,184 @@ export const LeadsTable = ({ leads, userRole, onEdit, onDelete }: LeadsTableProp
   const navigate = useNavigate();
 
   return (
-    <div className="overflow-hidden rounded-2xl bg-[#0a0c14]/80 border border-zinc-800/80 backdrop-blur-xl shadow-2xl">
-      <div className="overflow-x-auto custom-scrollbar">
-        <table className="min-w-full border-collapse text-left">
-          <thead>
-            <tr className="border-b border-zinc-800/80 text-xs text-zinc-500 uppercase tracking-widest bg-zinc-900/30">
-              <th className="px-6 py-4 font-medium">Name</th>
-              <th className="px-6 py-4 font-medium">Email</th>
-              <th className="px-6 py-4 font-medium">Status</th>
-              <th className="px-6 py-4 font-medium">Source</th>
-              <th className="px-6 py-4 font-medium">Created At</th>
-              <th className="px-6 py-4 font-medium text-right">Actions</th>
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-[#0a0c14]/80"
+    >
+      <div className="hidden md:block">
+        <table className="min-w-full divide-y divide-zinc-200 dark:divide-zinc-800">
+          <thead className="bg-zinc-50 dark:bg-zinc-900/50">
+            <tr>
+              <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                Name
+              </th>
+              <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                Status
+              </th>
+              <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                Source
+              </th>
+              <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                Created At
+              </th>
+              <th className="px-6 py-4 text-right text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                Actions
+              </th>
             </tr>
           </thead>
-          <tbody>
-            {leads.map((lead, index) => (
-              <motion.tr 
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.05 }}
-                key={lead.id} 
-                className="border-b border-zinc-800/40 text-sm text-zinc-300 hover:bg-zinc-800/30 transition-colors group"
+
+          <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
+            {leads.map((lead) => (
+              <tr
+                key={lead.id}
+                className="transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-900/40"
               >
-                <td className="px-6 py-4 font-medium text-zinc-100 flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center text-xs text-zinc-400 border border-zinc-700">
-                    {lead.name.charAt(0)}
-                  </div>
-                  {lead.name}
-                </td>
-                <td className="px-6 py-4 text-zinc-400">{lead.email}</td>
                 <td className="px-6 py-4">
-                  <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium border ${getStatusStyle(lead.status)}`}>
-                    <span className="w-1.5 h-1.5 rounded-full bg-current"></span>
-                    <span className="capitalize">{lead.status}</span>
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full border border-zinc-200 bg-zinc-100 text-sm font-semibold text-zinc-700 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
+                      {lead.name.charAt(0)}
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+                        {lead.name}
+                      </p>
+                      <p className="text-sm text-zinc-500 dark:text-zinc-400">{lead.email}</p>
+                    </div>
+                  </div>
+                </td>
+
+                <td className="px-6 py-4">
+                  <span
+                    className={`inline-flex rounded-full px-3 py-1 text-xs font-medium capitalize ${getStatusStyle(
+                      lead.status
+                    )}`}
+                  >
+                    {lead.status}
                   </span>
                 </td>
+
                 <td className="px-6 py-4">
-                  <span className="px-2.5 py-1 rounded-md text-[11px] font-medium bg-zinc-800 text-zinc-300 border border-zinc-700 capitalize">
+                  <span className="text-sm capitalize text-zinc-700 dark:text-zinc-300">
                     {lead.source}
                   </span>
                 </td>
-                <td className="px-6 py-4 text-zinc-500 text-xs tracking-wide">
+
+                <td className="px-6 py-4 text-sm text-zinc-500 dark:text-zinc-400">
                   {formatDate(lead.createdAt)}
                 </td>
+
                 <td className="px-6 py-4">
-                  <div className="flex items-center justify-end gap-1 opacity-40 group-hover:opacity-100 transition-opacity">
-                    <button 
+                  <div className="flex justify-end gap-2">
+                    <button
+                      type="button"
                       onClick={() => navigate(`/leads/${lead.id}`)}
-                      className="p-2 rounded-lg hover:bg-zinc-700 hover:text-cyan-400 transition-colors"
-                      title="View Details"
+                      className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-300 bg-white text-zinc-600 transition hover:bg-zinc-100 hover:text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900/70 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
+                      aria-label="View lead"
                     >
-                      <Eye className="w-4 h-4" />
+                      <Eye className="h-4 w-4" />
                     </button>
-                    <button 
+
+                    <button
+                      type="button"
                       onClick={() => onEdit(lead)}
-                      className="p-2 rounded-lg hover:bg-zinc-700 hover:text-emerald-400 transition-colors"
-                      title="Edit Lead"
+                      className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-300 bg-white text-zinc-600 transition hover:bg-zinc-100 hover:text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900/70 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
+                      aria-label="Edit lead"
                     >
-                      <Edit2 className="w-4 h-4" />
+                      <Edit2 className="h-4 w-4" />
                     </button>
-                    {userRole === 'admin' && (
-                      <button 
+
+                    {userRole === 'admin' ? (
+                      <button
+                        type="button"
                         onClick={() => onDelete(lead)}
-                        className="p-2 rounded-lg hover:bg-rose-500/10 hover:text-rose-400 transition-colors"
-                        title="Delete Lead"
+                        className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-rose-200 bg-rose-50 text-rose-600 transition hover:bg-rose-100 dark:border-rose-900/50 dark:bg-rose-950/20 dark:text-rose-400 dark:hover:bg-rose-950/40"
+                        aria-label="Delete lead"
                       >
-                        <Trash2 className="w-4 h-4" />
+                        <Trash2 className="h-4 w-4" />
                       </button>
+                    ) : (
+                      <span className="inline-flex h-9 items-center gap-1 rounded-lg border border-zinc-200 px-3 text-xs font-medium text-zinc-500 dark:border-zinc-700 dark:text-zinc-400">
+                        <Shield className="h-3.5 w-3.5" />
+                        Admin
+                      </span>
                     )}
                   </div>
                 </td>
-              </motion.tr>
+              </tr>
             ))}
           </tbody>
         </table>
       </div>
-    </div>
+
+      <div className="grid gap-4 p-4 md:hidden">
+        {leads.map((lead) => (
+          <div
+            key={lead.id}
+            className="rounded-xl border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/40"
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+                  {lead.name}
+                </p>
+                <p className="text-sm text-zinc-500 dark:text-zinc-400">{lead.email}</p>
+              </div>
+
+              <span
+                className={`inline-flex rounded-full px-3 py-1 text-xs font-medium capitalize ${getStatusStyle(
+                  lead.status
+                )}`}
+              >
+                {lead.status}
+              </span>
+            </div>
+
+            <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
+              <div>
+                <p className="text-zinc-500 dark:text-zinc-400">Source</p>
+                <p className="capitalize text-zinc-800 dark:text-zinc-200">{lead.source}</p>
+              </div>
+              <div>
+                <p className="text-zinc-500 dark:text-zinc-400">Created</p>
+                <p className="text-zinc-800 dark:text-zinc-200">{formatDate(lead.createdAt)}</p>
+              </div>
+            </div>
+
+            <div className="mt-4 flex gap-2">
+              <button
+                type="button"
+                onClick={() => navigate(`/leads/${lead.id}`)}
+                className="flex-1 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm font-medium text-zinc-700 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200"
+              >
+                View
+              </button>
+
+              <button
+                type="button"
+                onClick={() => onEdit(lead)}
+                className="flex-1 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm font-medium text-zinc-700 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200"
+              >
+                Edit
+              </button>
+
+              {userRole === 'admin' ? (
+                <button
+                  type="button"
+                  onClick={() => onDelete(lead)}
+                  className="flex-1 rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm font-medium text-rose-600 dark:border-rose-900/50 dark:bg-rose-950/20 dark:text-rose-400"
+                >
+                  Delete
+                </button>
+              ) : (
+                <div className="flex flex-1 items-center justify-center rounded-lg border border-zinc-200 px-3 py-2 text-xs text-zinc-500 dark:border-zinc-700 dark:text-zinc-400">
+                  Admin
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </motion.div>
   );
 };

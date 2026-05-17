@@ -1,25 +1,26 @@
 import type { SelectHTMLAttributes } from 'react';
+import { ChevronDown } from 'lucide-react';
 
 interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   label: string;
 }
 
-export const Select = ({ label, className = '', ...props }: SelectProps) => {
+export const Select = ({ label, className = '', children, ...props }: SelectProps) => {
   return (
-    <label className="flex w-full flex-col gap-1.5 relative group">
-      <span className="text-xs font-medium text-zinc-400 transition-colors group-focus-within:text-cyan-400">
+    <label className="block space-y-1.5">
+      <span className="block text-sm font-medium text-zinc-600 dark:text-zinc-300">
         {label}
       </span>
+
       <div className="relative">
         <select
-          className={`w-full appearance-none rounded-lg bg-[#030407] border border-zinc-800 px-3 py-2.5 text-sm text-zinc-100 outline-none ring-0 transition-all focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 shadow-inner ${className}`}
           {...props}
-        />
-        <div className="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-zinc-600 group-focus-within:text-cyan-500/50 transition-colors">
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-          </svg>
-        </div>
+          className={`w-full appearance-none rounded-xl border border-zinc-300 bg-white px-4 py-3 pr-10 text-sm text-zinc-900 outline-none transition focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 dark:border-zinc-800 dark:bg-[#09090B] dark:text-zinc-100 ${className}`}
+        >
+          {children}
+        </select>
+
+        <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400 dark:text-zinc-500" />
       </div>
     </label>
   );

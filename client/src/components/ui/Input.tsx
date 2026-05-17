@@ -7,21 +7,17 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 export const Input = ({ label, error, className = '', ...props }: InputProps) => {
   return (
-    <label className="flex w-full flex-col gap-1.5 group">
-      <span className={`text-xs font-medium transition-colors ${error ? 'text-rose-400' : 'text-zinc-400 group-focus-within:text-cyan-400'}`}>
+    <label className="block space-y-1.5">
+      <span className="block text-sm font-medium text-zinc-600 dark:text-zinc-300">
         {label}
       </span>
+
       <input
-        className={`rounded-lg bg-[#030407] border px-3 py-2.5 text-sm text-zinc-100 outline-none ring-0 transition-all placeholder-zinc-600 shadow-inner
-          ${error 
-            ? 'border-rose-500/50 focus:border-rose-500 focus:ring-1 focus:ring-rose-500/50' 
-            : 'border-zinc-800 focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50'
-          } ${className}`}
         {...props}
+        className={`w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 text-sm text-zinc-900 outline-none transition placeholder:text-zinc-400 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 dark:border-zinc-800 dark:bg-[#09090B] dark:text-zinc-100 dark:placeholder:text-zinc-500 ${className}`}
       />
-      {error ? (
-        <span className="text-[11px] font-medium text-rose-400 mt-1">{error}</span>
-      ) : null}
+
+      {error ? <p className="text-xs text-rose-500 dark:text-rose-400">{error}</p> : null}
     </label>
   );
 };
