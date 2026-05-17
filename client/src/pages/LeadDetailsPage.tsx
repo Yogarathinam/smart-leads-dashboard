@@ -5,7 +5,7 @@ import { Spinner } from '../components/ui/Spinner';
 import { ErrorState } from '../components/ui/ErrorState';
 import { LeadDetailsCard } from '../components/leads/LeadDetailsCard';
 import { useLead } from '../features/leads/leads.hooks';
-import { useThemeStore } from '../features/theme/theme.store';
+
 const LeadDetailsPage = () => {
   const { id = '' } = useParams();
   const navigate = useNavigate();
