@@ -1,7 +1,7 @@
 import { User } from '../models/user.model';
 import { ROLES, type Role } from '../constants/roles';
 import { ApiError } from '../utils/ApiError';
-import { signToken } from '../utils/jwt';
+import { generateToken } from '../utils/jwt';
 import type { LoginBody, RegisterBody } from '../validations/auth.validation';
 
 interface SafeUser {
@@ -47,7 +47,7 @@ export const registerUser = async ({ name, email, password }: RegisterBody) => {
 
   const safeUser = sanitizeUser(user);
 
-  const token = signToken({
+  const token = generateToken({
     userId: safeUser.id,
     role: safeUser.role,
   });
@@ -72,7 +72,7 @@ export const loginUser = async ({ email, password }: LoginBody) => {
 
   const safeUser = sanitizeUser(user);
 
-  const token = signToken({
+  const token = generateToken({
     userId: safeUser.id,
     role: safeUser.role,
   });

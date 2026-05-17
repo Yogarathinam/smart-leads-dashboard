@@ -32,7 +32,7 @@ const buildLeadFilter = (query: ListLeadsQuery) => {
 
 const buildSortOption = (sort?: ListLeadsQuery['sort']) => {
   return {
-    createdAt: sort === LEAD_SORT.OLDEST ? 1 : -1,
+    createdAt: sort === LEAD_SORT.OLDEST ? ('asc' as const) : ('desc' as const),
   };
 };
 

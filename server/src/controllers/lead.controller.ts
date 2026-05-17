@@ -31,20 +31,23 @@ export const listLeadsController = asyncHandler(async (req: Request, res: Respon
 });
 
 export const getLeadByIdController = asyncHandler(async (req: Request, res: Response) => {
-  const lead = await getLeadById(req.params.id);
+  const leadId = String(req.params.id);
+  const lead = await getLeadById(leadId);
 
   return res.status(200).json(new ApiResponse('Lead fetched successfully', lead));
 });
 
 export const updateLeadController = asyncHandler(async (req: Request, res: Response) => {
+  const leadId = String(req.params.id);
   const body = req.body as UpdateLeadBody;
-  const lead = await updateLead(req.params.id, body);
+  const lead = await updateLead(leadId, body);
 
   return res.status(200).json(new ApiResponse('Lead updated successfully', lead));
 });
 
 export const deleteLeadController = asyncHandler(async (req: Request, res: Response) => {
-  const lead = await deleteLead(req.params.id);
+  const leadId = String(req.params.id);
+  const lead = await deleteLead(leadId);
 
   return res.status(200).json(new ApiResponse('Lead deleted successfully', lead));
 });
