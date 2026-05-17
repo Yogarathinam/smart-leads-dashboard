@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../features/auth/auth.store';
+import { useThemeStore } from '../features/theme/theme.store';
 
 type AuthTab = 'login' | 'register';
 
@@ -196,13 +197,15 @@ const Reveal = ({
   );
 };
 
+type ClonableInputProps = React.InputHTMLAttributes<HTMLInputElement>;
+
 type InputFieldProps = {
   label: string;
   type: string;
   placeholder: string;
   icon: React.ReactNode;
   error?: string;
-  children: React.ReactNode;
+  children: React.ReactElement<ClonableInputProps>;
   rightSlot?: React.ReactNode;
   isDark: boolean;
 };
@@ -230,15 +233,17 @@ const InputField = ({
       </div>
 
       <div className="relative">
-        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-zinc-400">
+        <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-zinc-400">
           {icon}
         </div>
 
-        {React.cloneElement(children as React.ReactElement, {
+        {React.cloneElement(children, {
           type,
           placeholder,
           className: `w-full border ${borderCol} rounded-lg py-2.5 pl-10 pr-4 text-sm focus:outline-none focus:ring-1 ${
-            isDark ? 'focus:ring-zinc-100 focus:border-zinc-100' : 'focus:ring-zinc-900 focus:border-zinc-900'
+            isDark
+              ? 'focus:ring-zinc-100 focus:border-zinc-100'
+              : 'focus:ring-zinc-900 focus:border-zinc-900'
           } transition-all ${inputBg} ${textMain}`,
         })}
       </div>
@@ -858,7 +863,8 @@ const DashboardMock = ({ isDark }: { isDark: boolean }) => {
 };
 
 export default function LandingPage() {
-  const [isDark, setIsDark] = useState(true);
+  const isDark = useThemeStore((state) => state.isDark);
+const toggleTheme = useThemeStore((state) => state.toggleTheme);
   const [authConfig, setAuthConfig] = useState<{ isOpen: boolean; tab: AuthTab }>({
     isOpen: false,
     tab: 'login',
@@ -936,7 +942,7 @@ export default function LandingPage() {
           </div>
 
           <div className="flex items-center gap-4 sm:gap-6">
-            <button onClick={() => setIsDark((prev) => !prev)} className={`p-2 rounded-full transition-colors ${textMuted} hover:text-zinc-50`}>
+            <button onClick={toggleTheme} className={`p-2 rounded-full transition-colors ${textMuted} hover:text-zinc-50`}>
               {isDark ? <Icons.Sun /> : <Icons.Moon />}
             </button>
             <div className="hidden sm:block w-px h-4 bg-zinc-300 dark:bg-zinc-800" />

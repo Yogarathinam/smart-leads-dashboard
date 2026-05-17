@@ -21,7 +21,10 @@ export const LeadModal = ({
 }: LeadModalProps) => {
   return (
     <Modal title={title} open={open} onClose={onClose}>
-      <LeadForm initialValues={initialValues} onSubmit={onSubmit} isSubmitting={isSubmitting} />
+      <div className="mt-4">
+        {/* We rely on Modal from UI, but passing our highly styled LeadForm inside */}
+        <LeadForm initialValues={initialValues} onSubmit={onSubmit} isSubmitting={isSubmitting} />
+      </div>
     </Modal>
   );
 };

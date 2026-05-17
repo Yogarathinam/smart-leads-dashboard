@@ -1,4 +1,4 @@
-import { Button } from '../ui/Button';
+import { Download, Plus } from 'lucide-react';
 import { LeadsFilters } from './LeadsFilters';
 import { LeadsSearch } from './LeadsSearch';
 import type { LeadSource, LeadStatus } from '../../features/leads/leads.types';
@@ -33,21 +33,37 @@ export const LeadsToolbar = ({
   isExporting,
 }: LeadsToolbarProps) => {
   return (
-    <div className="space-y-4 rounded-2xl bg-white p-6 shadow-sm">
-      <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+    <div className="space-y-5 rounded-2xl bg-[#0a0c14]/80 border border-zinc-800/80 p-5 shadow-2xl backdrop-blur-xl relative overflow-hidden">
+      {/* Subtle top edge gradient highlight */}
+      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-cyan-500/20 to-transparent"></div>
+      
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between relative z-10">
         <div className="w-full md:max-w-md">
           <LeadsSearch value={search} onChange={onSearchChange} />
         </div>
 
-        <div className="flex gap-3">
-          {canExport ? (
-            <Button variant="secondary" onClick={onExportClick} disabled={isExporting}>
+        <div className="flex flex-wrap gap-3">
+          {canExport && (
+            <button 
+              onClick={onExportClick} 
+              disabled={isExporting}
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-zinc-300 bg-zinc-800/50 hover:bg-zinc-700/50 border border-zinc-700/80 rounded-lg transition-colors active:scale-95 disabled:opacity-50"
+            >
+              <Download className="w-4 h-4" />
               {isExporting ? 'Exporting...' : 'Export CSV'}
-            </Button>
-          ) : null}
-          <Button onClick={onCreateClick}>Create Lead</Button>
+            </button>
+          )}
+          <button 
+            onClick={onCreateClick}
+            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-zinc-900 bg-cyan-400 hover:bg-cyan-300 rounded-lg transition-all active:scale-95 shadow-[0_0_15px_rgba(34,211,238,0.25)]"
+          >
+            <Plus className="w-4 h-4" />
+            Create Lead
+          </button>
         </div>
       </div>
+
+      <div className="h-px w-full bg-zinc-800/50"></div>
 
       <LeadsFilters
         status={status}
