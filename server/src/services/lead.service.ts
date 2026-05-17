@@ -150,7 +150,7 @@ export const exportLeadsToCsv = async (query: ListLeadsQuery, res: Response) => 
   res.setHeader('Content-Disposition', 'attachment; filename=leads.csv');
   res.setHeader('Content-Type', 'text/csv');
 
-  const csvStream = format({ headers: true });
+  const csvStream = format({ headers: true })as any;
 
   csvStream.pipe(res);
 
