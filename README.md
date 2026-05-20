@@ -37,7 +37,8 @@
 * **Frontend:** `https://gigflow-smart-leads-dashboard-pied.vercel.app/`
 * **Backend API:** `https://smart-leads-dashboard-api-nkoj.onrender.com`
 * **API Health:** `https://smart-leads-dashboard-api-nkoj.onrender.com/api/v1/health`
-
+* **LOGIN** admin@example.com , sales@example.com
+* **Pass:** Password123
 ---
 
 ## <img src="https://cdn.jsdelivr.net/npm/lucide-static@0.344.0/icons/sparkles.svg" width="24" height="24" align="top" /> Features
